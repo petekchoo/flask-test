@@ -1,9 +1,13 @@
 <!doctype html>
 <html>
 <body>
-    <p>Hello! Welcome to basic data entry page very good</p>
-    
-    <p><a href="/form">Check out this cool form!</a></p>
-    <p><a href="/data">Check out the data response!</a></p>
+    <p>Hello! Welcome to a combined content and data page!</p>
+
+    <form action="/data" method = "POST">
+        <p>Name <input type = "text" name = "Name" /></p>
+        <p>City <input type = "text" name = "Location" /></p>
+        <p>Country <input type = "text" name = "Country" /></p>
+        <p><input type = "submit" value = "Submit" /></p>
+    </form>
 </body>
 </html>
