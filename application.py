@@ -4,4 +4,6 @@ application = Flask(__name__)
 @application.route('/')
 
 def hello_world():
-    return 'Koo it is youuuuuu'
+    strUserInput = input("Input word!")
+    
+    return strUserInput
