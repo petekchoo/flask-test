@@ -1,6 +1,17 @@
 <form action="/data" method = "POST">
-    <p>Name <input type = "text" name = "Name" /></p>
-    <p>City <input type = "text" name = "Location" /></p>
-    <p>Country <input type = "text" name = "Country" /></p>
+    <p><label for="Movement">Select where to move:</label>
+    <select id="Movement" name="movement">
+        <option value=-1>Move left!</option>
+        <option value=0>Stay put!</option>
+        <option value=1>Move right!</option>
+    </select></p>
+    
+    <p></p><label for="Action">Select which action to take when you get there:</label>
+    <select id="Action" name="action">
+        <option value=-1>Attack!</option>
+        <option value=0>Block!</option>
+        <option value=1>Grab!</option>
+    </select></p>
+    
     <p><input type = "submit" value = "Submit" /></p>
 </form>

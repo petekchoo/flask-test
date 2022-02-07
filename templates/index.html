@@ -3,11 +3,33 @@
 <body>
     <p>Hello! Welcome to a combined content and data page!</p>
 
-    <form action="/data" method = "POST">
-        <p>Name <input type = "text" name = "Name" /></p>
-        <p>City <input type = "text" name = "Location" /></p>
-        <p>Country <input type = "text" name = "Country" /></p>
+    <table align="left" border="1">
+        <tr>
+            <td style='text-align: center;'>{{ variableA }}</td>
+            <td style='text-align: center;'>{{ variableB }}</td>
+        </tr>
+    </table><br>
+
+    <form action="?" method = "POST">
+        
+        <p>Pick where to move:</p>
+        <input type="radio" id="left" name="movement" value=-1>
+        <label for="left">Move Left!</label><br>
+        <input type="radio" id="stay" name="movement" value=0>
+        <label for="stay">Stay Still!</label><br>
+        <input type="radio" id="right" name="movement" value=1>
+        <label for="right">Move Right!</label>
+
+        <p>Select your action:</p>
+        <input type="radio" id="attack" name="action" value=-1>
+        <label for="attack">Attack!</label><br>
+        <input type="radio" id="block" name="action" value="0">
+        <label for="block">Block!</label><br>
+        <input type="radio" id="grab" name="action" value="1">
+        <label for="grab">Grab!</label>
+        
         <p><input type = "submit" value = "Submit" /></p>
     </form>
+
 </body>
 </html>
