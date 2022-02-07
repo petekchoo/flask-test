@@ -3,7 +3,7 @@ application = Flask(__name__)
 
 @application.route('/')
 def welcome():
-    return 'hello! welcome to this webapp', '\n', render_template('index.html')
+    return render_template('index.html')
 
 @application.route('/form')
 def form():
