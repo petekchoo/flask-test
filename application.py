@@ -22,5 +22,3 @@ def manipulateInputs(inputA, inputB):
     strTempB = inputB
 
     return strTempB, strTempA
-
-application.run()
