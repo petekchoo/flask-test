@@ -43,5 +43,3 @@ def form_example():
     <div><label>Letter 5 Yellows: <input type="text" name="l5y"></label></div>
     <div><label>Grey Letters: <input type="text" name="grey"></label></div>
     <input type="submit" value="Submit"></form>'''
-
-application.run()
