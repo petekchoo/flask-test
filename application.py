@@ -14,6 +14,7 @@ def form_example():
     yellowlist = [[], [], [], [], []]
     bestword = ""
     fileFiveLetters = open("data/fiveletterwords.txt", "r")
+    strgrey = ""
      
     if request.method == 'POST':
         
@@ -22,16 +23,15 @@ def form_example():
                 greenlist.append(None)
 
             else:
-                greenlist.append(request.form.get('l'+str(i)+'g'))
+                greenlist.append(request.form.get('l'+str(i)+'g').lower())
 
         for letter in request.form.get('grey'):
-            greylist.append(letter)
+            strgrey += letter.lower()
+            greylist.append(letter.lower())
 
         for i in range(1, 6):
             for letter in request.form.get('l'+str(i)+'y'):
-                yellowlist[i-1].append(letter)
-
-        strgrey = ''.join(greylist)
+                yellowlist[i-1].append(letter.lower())
 
         bestword = runChecks(fileFiveLetters, greylist, yellowlist, greenlist)
 
@@ -41,16 +41,16 @@ def form_example():
             grey = greylist, 
             yellow = yellowlist, 
             word = bestword,
-            l1g = request.form.get('l1g'),
-            l2g = request.form.get('l2g'),
-            l3g = request.form.get('l3g'),
-            l4g = request.form.get('l4g'),
-            l5g = request.form.get('l5g'),
-            l1y = ''.join(request.form.get('l1y')),
-            l2y = request.form.get('l2y'),
-            l3y = request.form.get('l3y'),
-            l4y = request.form.get('l4y'),
-            l5y = request.form.get('l5y'),
+            l1g = request.form.get('l1g').lower(),
+            l2g = request.form.get('l2g').lower(),
+            l3g = request.form.get('l3g').lower(),
+            l4g = request.form.get('l4g').lower(),
+            l5g = request.form.get('l5g').lower(),
+            l1y = request.form.get('l1y').lower(),
+            l2y = request.form.get('l2y').lower(),
+            l3y = request.form.get('l3y').lower(),
+            l4y = request.form.get('l4y').lower(),
+            l5y = request.form.get('l5y').lower(),
             strgrey = strgrey
         )
 
