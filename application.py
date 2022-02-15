@@ -13,11 +13,16 @@ def form_example():
     greylist = []
     yellowlist = [[], [], [], [], []]
     bestword = ""
+    fileFiveLetters = open("data/fiveletterwords.txt", "r")
      
     if request.method == 'POST':
         
         for i in range(1, 6):
-            greenlist.append(request.form.get('l'+str(i)+'g'))
+            if request.form.get('l'+str(i)+'g') == None:
+                greenlist.append(None)
+
+            else:
+                greenlist.append(request.form.get('l'+str(i)+'g'))
 
         for letter in request.form.get('grey'):
             greylist.append(letter)
@@ -26,7 +31,28 @@ def form_example():
             for letter in request.form.get('l'+str(i)+'y'):
                 yellowlist[i-1].append(letter)
 
-        return render_template('form.html', green = greenlist, grey = greylist, yellow = yellowlist, word = bestword)
+        strgrey = ''.join(greylist)
+
+        bestword = runChecks(fileFiveLetters, greylist, yellowlist, greenlist)
+
+        return render_template(
+            'form.html', 
+            green = greenlist, 
+            grey = greylist, 
+            yellow = yellowlist, 
+            word = bestword,
+            l1g = request.form.get('l1g'),
+            l2g = request.form.get('l2g'),
+            l3g = request.form.get('l3g'),
+            l4g = request.form.get('l4g'),
+            l5g = request.form.get('l5g'),
+            l1y = ''.join(request.form.get('l1y')),
+            l2y = request.form.get('l2y'),
+            l3y = request.form.get('l3y'),
+            l4y = request.form.get('l4y'),
+            l5y = request.form.get('l5y'),
+            strgrey = strgrey
+        )
 
     # otherwise handle the GET request
     return '''
@@ -43,3 +69,146 @@ def form_example():
     <div><label>Letter 5 Yellows: <input type="text" name="l5y"></label></div>
     <div><label>Grey Letters: <input type="text" name="grey"></label></div>
     <input type="submit" value="Submit"></form>'''
+
+# creates list of words that don't contain any of the letters in lstCant
+def cantList(wordlist, cant):
+
+    lstWords = []
+    boolMatch = True
+    
+    for word in wordlist:
+
+        for letter in cant:
+            if letter in word:
+                boolMatch = False
+        
+        if boolMatch == True:
+            lstWords.append(word.strip())
+        
+        else:
+            boolMatch = True
+    
+    return lstWords
+
+# creates list of words that don't contain any of the letters in lstDont in a specific position
+def dontList(wordlist, dont):
+
+    lstWords = []
+    intPosition = 0
+    boolMatch = True
+
+    for word in wordlist:
+
+        for item in dont:
+
+            for letter in item:
+
+                if word.strip()[intPosition] == letter:
+                    boolMatch = False
+        
+            intPosition += 1
+
+        if boolMatch == True: #bool([x for x in item if(x in word)]) == True:
+            intPosition = 0
+            lstWords.append(word.strip())
+        
+        else:
+            boolMatch = True
+            intPosition = 0
+
+    return lstWords
+
+# creates a list of words that contains the set of letters, but not in the designated positions
+def includeList(wordlist, dont):
+
+    lstWords = []
+    lstDont = list({x for l in dont for x in l})
+    boolMatch = True
+    
+    if lstDont == []:
+        return wordlist
+
+    for word in wordlist:
+        for letter in lstDont:
+            if letter not in word:
+                boolMatch = False
+    
+        if boolMatch == True:
+            lstWords.append(word.strip())
+        
+        else:
+            boolMatch = True
+    
+    return lstWords
+
+
+# creates list of words that contain exact letters in lstMust by position (greenlist)
+def mustList(wordlist, must):
+
+    lstWords = []
+    intPosition = 0
+    boolMatch = True
+
+    for word in wordlist:
+
+        for item in must:
+
+            if word.strip()[intPosition] == item or item == "":
+                intPosition += 1
+            
+            else:
+                boolMatch = False
+        
+        if boolMatch == True:
+            intPosition = 0
+            lstWords.append(word.strip())
+        
+        else:
+            boolMatch = True
+            intPosition = 0
+    
+    return lstWords
+
+def topWord(wordlist):
+
+    intWords = len(wordlist)
+    lstCount = [0 for x in range(26)]
+    numNewScore = 1
+    numBestScore = 0
+    strMaxWord = ""
+
+    for word in wordlist:
+        for letter in list(set(word)):
+            lstCount[ord(letter) - 97] = lstCount[ord(letter) - 97] + 1
+
+    lstCoef = [x/intWords for x in lstCount]
+    
+    for word in wordlist:
+        
+        if len(word) == len(list(set(word))):
+            for letter in word:
+                numNewScore = numNewScore * lstCoef[ord(letter) - 97]
+
+        else:
+            for letter in list(set(word)):
+                numNewScore = numNewScore * lstCoef[ord(letter) - 97] * 1/(len(word) - len(list(set(wordlist))) - len(wordlist))
+        # print(word, numNewScore)
+        
+        if numNewScore > numBestScore:
+            numBestScore = numNewScore
+            numNewScore = 1
+            strMaxWord = word
+        
+        else:
+            numNewScore = 1
+    
+    return strMaxWord
+
+def runChecks(wordlist, cant, dont, must):
+
+    list1 = cantList(wordlist, cant)
+    list2 = dontList(list1, dont)
+    list3 = includeList(list2, dont)
+    list4 = mustList(list3, must)
+
+    return topWord(list4)
